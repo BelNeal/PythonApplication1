@@ -2,26 +2,58 @@
 
 import openpyxl
 import os
+import time
+import stat
 import webbrowser
 
-print('What project# are you looking for')
-FileName = input()
+
+
 
 path = r"Z:\1. Projects"
 vendor = "5.  Vendor Information"
-removedire = {"0. Approval Documents", '0.5 Plasma Work' }
+removedire = {"0. Approval Documents", '0.5 Plasma Work','0.1. Folder Template' ,'0.2. Common Components','0.3. Issues'}
+
+def GetProjectNum():
+   getLastMod(path)
+   print('What project# are you looking for')
+   global FileName 
+   FileName = input()
+   searchFile(FileName)
+   return FileName
+
+def getLastMod(path):
+
+    date_format = '%Y-%m-%d'
+    dirList = os.listdir(path)
+   # print(dirList)
+    for dirList in dirList:
+        fileNameDirSearch = os.path.join(path, dirList)
+        modTimeepoch = os   .path.getmtime(fileNameDirSearch)
+        modTime = time.strftime('%Y-%m-%d', time.localtime(modTimeepoch))
+    #    print(modTime)
+        if time.strptime('2021-1-1', date_format) >= time.strptime(modTime, date_format): #<= time.strptime('2022-1-1', date_format):
+            removedire.add(dirList)
+           # return removedire
+    #print(removedire)
+    return removedire
+    
+
+
+
+
 
 
 def searchFile(fileName):
-       for root, dir, files in os.walk(path):
-        dir[:] =[d for d in dir if d not in removedire]
-        print('Looking in:', root)
-        for dir in dir:
+       # print(fileName)
+        for root, dir, files in os.walk(path):
+         dir[:] =[d for d in dir if d not in removedire]
+        # print(dir)
+         print('Looking in:', root)
+         for dir in dir:
             try:
                 found = dir.find(fileName)
                 #print(found)
                 if found != -1:
-                    
                     print(fileName, 'Found')
                     print(dir)
                     print(root)
@@ -58,14 +90,21 @@ def searchFile(fileName):
                    
 
 
-            except:
-              break
+            except: 
+                break
+              
 
-                            
-                  
- 
 if __name__ == '__main__':
-    searchFile(FileName)
+    GetProjectNum()
+    
+#searchFile(FileName)
+
+
+
+ 
+
+   
+    # searchFile(FileName)
                                     
             
                 
